@@ -2,3 +2,4 @@ node_modules
 package-lock.json
 *.ignoreme
 .DS_Store
+logs/*.log
