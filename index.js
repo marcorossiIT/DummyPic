@@ -22,17 +22,18 @@ app.use('/:width/:height', (req, res, next) => {
   const pic = new Pic(parseInt(req.params.width), parseInt(req.params.height));
 
 
-  let picLocalPath = 'image.png'
 
-  saveCanvas(pic, picLocalPath)
-
-
-
-  res.status(200).sendFile(PUBLIC_DIR + picLocalPath, { root: __dirname })
+  res.status(200).send(pic.canvas.toBuffer('image/png'))
 
 })
 app.get('/', (req, res, next) => {
   sendStandardResponse(res);
+})
+
+app.get('/testhtml', (req, res, next) => {
+  const testHtmlPath = 'test.html';
+  res.status(200).sendFile(PUBLIC_DIR + testHtmlPath, { root: __dirname })
+
 })
 
 app.listen(port, () => {
@@ -112,7 +113,7 @@ class Pic {
     this.#context.textAlign = this.#centralTextAlign;
     this.#context.fillStyle = this.#centralTextFillStyle;
     this.#context.textBaseline = this.#centralTextBaseline;
-    this.#context.fillText(this.#centralText, this.#width / 2, this.#height /2, 170);
+    this.#context.fillText(this.#centralText, this.#width / 2, this.#height / 2, 170);
 
   }
 
