@@ -3,7 +3,7 @@ const express = require('express')
 const Canvaser = require('canvas');
 
 const PUBLIC_DIR = "public/"
-const STANDARD_RESPONSE_PNG = 'How to use me.png'
+const STANDARD_RESPONSE_PNG = 'How to use me.jpeg'
 
 const fs = require('fs');
 
