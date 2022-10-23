@@ -3,3 +3,4 @@ package-lock.json
 *.ignoreme
 .DS_Store
 logs/*.log
+notes
