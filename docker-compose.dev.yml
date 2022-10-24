@@ -5,7 +5,7 @@ services:
     environment:
       - env=dev
     ports:
-      - "8800:3004"
+      - "80:3004"
     command: npm run start:dev
     volumes:
       - ./:/app
