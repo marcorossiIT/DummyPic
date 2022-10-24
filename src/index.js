@@ -1,8 +1,8 @@
-const { outlog } = require('./logs/FileLogger');
+const { outlog } = require('./FileLogger');
 const express = require('express')
 const Canvaser = require('canvas');
 
-const PUBLIC_DIR = "public/"
+const ASSETS_DIR = "assets/"
 const STANDARD_RESPONSE_PNG = 'How to use me.jpeg'
 
 const fs = require('fs');
@@ -32,7 +32,7 @@ app.get('/', (req, res, next) => {
 
 app.get('/testhtml', (req, res, next) => {
   const testHtmlPath = 'test.html';
-  res.status(200).sendFile(PUBLIC_DIR + testHtmlPath, { root: __dirname })
+  res.status(200).sendFile(ASSETS_DIR + testHtmlPath, { root: __dirname })
 
 })
 
@@ -43,12 +43,12 @@ app.listen(port, () => {
 
 function saveCanvas(pic, picLocalPath) {
   const picBuffer = pic.canvas.toBuffer('image/png');
-  fs.writeFileSync(PUBLIC_DIR + picLocalPath, picBuffer)
+  fs.writeFileSync(ASSETS_DIR + picLocalPath, picBuffer)
   outlog('pic saved')
 }
 
 function sendStandardResponse(responseStream) {
-  responseStream.sendFile(PUBLIC_DIR + STANDARD_RESPONSE_PNG, { root: __dirname });
+  responseStream.sendFile(ASSETS_DIR + STANDARD_RESPONSE_PNG, { root: __dirname });
 }
 
 class Pic {

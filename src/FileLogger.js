@@ -1,6 +1,6 @@
 module.exports = {
     outlog: function (...args) {
-        const logpath = "logs/"
+        const logpath = "logs/" // path riferita al punto di avvio del programma
         fs = require('fs');
         let dataOggiArr = new Date().toISOString().split('T');
         let oggi = dataOggiArr[0]
