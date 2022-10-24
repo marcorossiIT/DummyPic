@@ -1,7 +1,0 @@
-version: "3"
-services:
-  node-app:
-    build: .
-    ports:
-      - "8800:3004"
-    
