@@ -5,5 +5,5 @@ RUN apt update -yy && apt install python3 build-essential libcairo2-dev libpango
 COPY package.json . 
 RUN npm i
 COPY . ./
-EXPOSE 3004
+EXPOSE 80
 CMD ["npm", "run", "start:prod"]

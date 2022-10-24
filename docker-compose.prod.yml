@@ -5,5 +5,5 @@ services:
     environment:
       - env=prod
     ports:
-      - "80:3004"
+      - "80:80"
     
