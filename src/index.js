@@ -9,8 +9,7 @@ const fs = require('fs');
 
 const app = express()
 
-const port = 3004
-
+const port = process.env.PORT || 80
 
 app.use('/:width/:height', (req, res, next) => {
   outlog(`---------`, `new pic requested: ${parseInt(req.params.width)}x${parseInt(req.params.height)}, colore standard`)
