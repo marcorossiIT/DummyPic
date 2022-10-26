@@ -17,5 +17,12 @@ if you have the chance it could be best to use [URLSearchParams](https://develop
 | `textcolor` | coming soon |
 | `textgradient` | coming soon |
 
-## post support
-### svg inner shapes support
+
+# Collaborate and engage
+Steps to start collaborate
+## Assumptions
+It's assumed you have already installed Docker. It's not mandatory but its best if you have the opportunity to test your changes.
+## Steps
+1. clone this repo
+2. in a linux environment run `bash startdev.sh`.   This will start up a new container with node and nodemon the project.
+3. when you are finished: run `bash enddev.sh`

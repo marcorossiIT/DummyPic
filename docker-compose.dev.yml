@@ -1,11 +1,13 @@
 version: "3"
 services:
   node-app:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
     environment:
       - env=dev
     ports:
-      - "80:80"
+      - "8088:80"
     command: npm run start:dev
     volumes:
       - ./:/app

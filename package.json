@@ -1,6 +1,6 @@
 {
-  "name": "todo-place-a-pic-here",
-  "version": "0.0.0",
+  "name": "DumyPic Art Generator",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "start:dev": "nodemon src/index.js",

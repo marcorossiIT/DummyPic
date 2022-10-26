@@ -7,11 +7,8 @@ ENV env=prod
 EXPOSE 80
 # for layering cache purposes this is before the next copy
 COPY package.json . 
-RUN if [ $env = "dev" ]; \
-        then npm i ; \
-        else npm i --only=production; \
-    fi;
+RUN npm i --only=production
     
 COPY . ./
-CMD ["npm", "run", "start:prod"]
+CMD node index.js
 
