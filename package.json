@@ -1,6 +1,6 @@
 {
-  "name": "DumyPic Art Generator",
-  "version": "1.0.4",
+  "name": "DummyPic Art Generator",
+  "version": "1.0.5",
   "private": true,
   "scripts": {
     "start:dev": "nodemon src/index.js",
