@@ -25,7 +25,7 @@ app.use('/:width/:height', (req, res, next) => {
   res.status(200).send(pic.canvas.toBuffer('image/png'))
 
 })
-app.get('/', (req, res, next) => {
+app.use('/', (req, res, next) => {
   sendStandardResponse(res);
 })
 
@@ -159,4 +159,9 @@ class Pic {
   }
 
 
+}
+
+
+function logRequests(requestObject) {
+  //TODO send to service the log of get requests
 }
