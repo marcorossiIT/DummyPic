@@ -11,40 +11,30 @@ const app = express()
 
 const port = process.env.PORT || 80
 
-app.use('/:width/:height', (req, res, next) => {
-  outlog(`---------`, `new pic requested: ${parseInt(req.params.width)}x${parseInt(req.params.height)}, colore standard`)
+app.use(express.urlencoded({ extended: true }), urlEncodedParameterSanificationRoute);
 
-  if (!parseInt(req.params.width) || !parseInt(req.params.height))
-    sendStandardResponse(res);
+app.get('/testhtml', (req, res) => {
+  outlog(`---------`, `test html asked`)
 
-
-  const pic = new Pic(parseInt(req.params.width), parseInt(req.params.height));
+  outlog(req.body)
 
 
-
-  res.status(200).send(pic.canvas.toBuffer('image/png'))
-
-})
-app.use('/', (req, res, next) => {
-  sendStandardResponse(res);
-})
-
-app.get('/testhtml', (req, res, next) => {
   const testHtmlPath = 'test.html';
   res.status(200).sendFile(ASSETS_DIR + testHtmlPath, { root: __dirname })
 
 })
+
+app.use('/:width/:height', widthAndHeightRoute)
+app.use('/', rootResponseRoute);
+
+
+
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 })
 
 
-function saveCanvas(pic, picLocalPath) {
-  const picBuffer = pic.canvas.toBuffer('image/png');
-  fs.writeFileSync(ASSETS_DIR + picLocalPath, picBuffer)
-  outlog('pic saved')
-}
 
 function sendStandardResponse(responseStream) {
   responseStream.sendFile(ASSETS_DIR + STANDARD_RESPONSE_PNG, { root: __dirname });
@@ -59,8 +49,8 @@ class Pic {
   #centralTextFont = "bold 30pt Arial"
   #centralTextFontKerning = "none"
   #centralTextAlign = "center"
-  #centralTextFillStyle = "#0A0908"
   #centralTextBaseline = "middle"
+  #centralTextFillColor = "#515151"
   #canvasFillColor = "#A0A4A7"
 
 
@@ -100,6 +90,7 @@ class Pic {
    */
   #fillCanvas() { //interna. scrittura effettiva
     this.#context.fillStyle = this.#canvasFillColor;
+
     this.#context.fillRect(0, 0, this.#width, this.#height)
   }
 
@@ -110,7 +101,7 @@ class Pic {
     this.#context.font = this.#centralTextFont;
     this.#context.fontKerning = this.#centralTextFontKerning
     this.#context.textAlign = this.#centralTextAlign;
-    this.#context.fillStyle = this.#centralTextFillStyle;
+    this.#context.fillStyle = this.#centralTextFillColor;
     this.#context.textBaseline = this.#centralTextBaseline;
     this.#context.fillText(this.#centralText, this.#width / 2, this.#height / 2, 170);
 
@@ -127,6 +118,8 @@ class Pic {
     this.canvasRedraw();
   }
 
+
+
   /**
    * Set the background color of canvas.  
    * Recreate canvas.
@@ -135,6 +128,11 @@ class Pic {
   setBackgroundColor(color) {
     this.#canvasFillColor = color;
     this.canvasRedraw();
+  }
+  setTextColor(color) {
+    this.#centralTextFillColor = color;
+    this.canvasRedraw();
+
   }
 
   get width() {
@@ -159,9 +157,109 @@ class Pic {
   }
 
 
+
 }
 
 
-function logRequests(requestObject) {
-  //TODO send to service the log of get requests
+
+
+function urlEncodedParameterSanificationRoute(req, res, next) {
+  /*
+  expectations:
+  'color' : string, hex color
+  */
+
+  const queryparams = req.query;
+
+  for (const key in queryparams) {
+    if (Object.hasOwnProperty.call(queryparams, key)) {
+      const val = queryparams[key];
+      switch (key) {
+        case 'color':
+          if (typeof val !== 'string' || val.length != 6) {
+            sendStandardResponse(res)
+          }
+          break;
+
+        default:
+          sendStandardResponse(res)
+          break;
+      }
+
+    }
+  }
+
+  next();
+
+}
+
+function widthAndHeightRoute(req, res, next) {
+
+  outlog(`---------`, `new pic requested: ${parseInt(req.params.width)}x${parseInt(req.params.height)}`)
+
+  if (!parseInt(req.params.width) || !parseInt(req.params.height))
+    sendStandardResponse(res);
+
+  // -- get or make background color
+  // if user provided a color in hex
+
+
+
+  let colorHex, color_r, color_g, color_b;
+  if ('color' in req.query) {
+    colorHex = Math.abs(parseInt(req.query['color'], 16)).toString(16); // validation by conversion
+  } else {
+    // randomize a new color
+    color_r = Math.round(Math.random() * 255).toString(16);
+    color_g = Math.round(Math.random() * 255).toString(16);
+    color_b = Math.round(Math.random() * 255).toString(16);
+    colorHex = color_r + color_g + color_b;
+  }
+  /**
+   * Hexadecimal string rapresentation of user's color
+   */
+
+  // -- elaborate text color
+  // if background is bright the text is darker
+  // text is half the brightness
+
+  // get the Value (like in HSV) of the chosen color
+  let textColorHex;
+  const color_v = avgIn([parseInt(color_r, 16) / 255, parseInt(color_g, 16) / 255, parseInt(color_b, 16) / 255]);
+  if (color_v <= 0.4) {
+    // cut in half individual primaries
+    textColorHex = 'FFFFFF77'
+  } else {
+    // half the reversed value of each color, than reverse the value
+    textColorHex = '00000077'
+  }
+
+  // -- initialize a new Pic
+  const pic = new Pic(parseInt(req.params.width), parseInt(req.params.height));
+
+  const backgroundFillColorHex = '#' + colorHex;
+  pic.setBackgroundColor(backgroundFillColorHex);
+  const textFillColorHex = '#' + textColorHex;
+  pic.setTextColor(textFillColorHex)
+
+
+  res.status(200).set('Content-Type', 'image/png').send(pic.canvas.toBuffer('image/png'));
+}
+function rootResponseRoute(req, res, next) {
+
+  sendStandardResponse(res);
+
+}
+
+function avgIn(numbersArr) {
+  if (!Array.isArray(numbersArr) || numbersArr.length == 0) {
+    return false
+  }
+  
+  let sum = 0;
+  numbersArr.forEach(el => {
+    sum += Number(el)
+  })
+
+  return sum / numbersArr.length;
 }
