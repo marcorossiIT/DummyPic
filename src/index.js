@@ -63,6 +63,8 @@ class Pic {
     this.#canvas = Canvaser.createCanvas(this.#width, this.#height);
     this.#context = this.#canvas.getContext('2d');
 
+    this.#context.antialias = 'gray'
+
     if (fillColor != null) {
       this.#fillCanvas(fillColor);
     }
