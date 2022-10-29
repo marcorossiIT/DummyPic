@@ -204,9 +204,6 @@ function widthAndHeightRoute(req, res, next) {
 
   // -- get or make background color
   // if user provided a color in hex
-
-
-
   let colorHex, color_r, color_g, color_b;
   if ('color' in req.query) {
     colorHex = Math.abs(parseInt(req.query['color'], 16)).toString(16); // validation by conversion
@@ -221,20 +218,30 @@ function widthAndHeightRoute(req, res, next) {
    * Hexadecimal string rapresentation of user's color
    */
 
-  // -- elaborate text color
-  // if background is bright the text is darker
-  // text is half the brightness
+  // -- get or elaborate text color
 
-  // get the Value (like in HSV) of the chosen color
-  let textColorHex;
-  const color_v = avgIn([parseInt(color_r, 16) / 255, parseInt(color_g, 16) / 255, parseInt(color_b, 16) / 255]);
-  if (color_v <= 0.4) {
-    // cut in half individual primaries
-    textColorHex = 'FFFFFF77'
+  let textColorHex
+  if ('textColor' in req.query) {
+    textColorHex = Math.abs(parseInt(req.query['textColor'], 16)).toString(16); // validation by conversion
   } else {
-    // half the reversed value of each color, than reverse the value
-    textColorHex = '00000077'
+
+    // if background is bright the text is darker
+    // text is half the brightness
+
+    // get the Value (like in HSV) of the chosen color
+
+    const color_v = avgIn([parseInt(color_r, 16) / 255, parseInt(color_g, 16) / 255, parseInt(color_b, 16) / 255]);
+    if (color_v <= 0.4) {
+      // cut in half individual primaries
+      textColorHex = 'FFFFFF77'
+    } else {
+      // half the reversed value of each color, than reverse the value
+      textColorHex = '00000077'
+    }
+
   }
+
+
 
   // -- initialize a new Pic
   const pic = new Pic(parseInt(req.params.width), parseInt(req.params.height));
@@ -257,7 +264,7 @@ function avgIn(numbersArr) {
   if (!Array.isArray(numbersArr) || numbersArr.length == 0) {
     return false
   }
-  
+
   let sum = 0;
   numbersArr.forEach(el => {
     sum += Number(el)
