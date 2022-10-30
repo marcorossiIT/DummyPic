@@ -11,6 +11,7 @@ const app = express()
 
 const port = process.env.PORT || 80
 
+
 app.use(express.urlencoded({ extended: true }), urlEncodedParameterSanificationRoute);
 
 app.get('/testhtml', (req, res) => {
@@ -244,7 +245,7 @@ function widthAndHeightRoute(req, res, next) {
   const textFillColorHex = '#' + textColorHex;
   pic.setTextColor(textFillColorHex)
 
-
+  // res.set('Cache-Control', 'max-age=100')
   res.status(200).set('Content-Type', 'image/png').send(pic.canvas.toBuffer('image/png'));
 }
 function rootResponseRoute(req, res, next) {
