@@ -1,5 +1,8 @@
 # TODO: place a pic here
-# Project in early phases: this wont work, please wait
+## Temporary website
+[http://dummypic.onrender.com/1080/720](http://dummypic.onrender.com/1080/720)
+![DummyPic Example](http://dummypic.onrender.com/2920/70)
+
 ## Usage
 
 `/width/height/?color=HEXHEX&text=hello`
@@ -11,7 +14,7 @@ if you have the chance it could be best to use [URLSearchParams](https://develop
 | :-----: |  ----- |
 | `random` | `true` or `false` br>coming soon|
 | `cached` | `true` or `false` <br>coming soon|
-| `color` | chose colors in hex format without `#` <br>coming soon|
+| `color` | chose colors in hex format without `#`|
 | `gradient` | coming soon |
 | `text` | coming soon |
 | `textcolor` | coming soon |
