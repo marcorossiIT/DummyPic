@@ -5,13 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test HTML use of Tool</title>
+    <style>
+        body {
+            display:flex;
+            justify-content: center;
+            align-content: center;
+        }
+        
+    </style>
 </head>
 <body>
-    <h1>Local tests</h1>
-    <img src="http://localhost/300/300">
-    <img src="http://localhost/" alt="standard response" >
-    <h1>remote tests</h1>
-    <img src="https://todo-place-a-picture-here.onrender.com/300/300">
-    <img src="https://todo-place-a-picture-here.onrender.com" alt="standard response" >
+    <img src="http://localhost:8088/300/300">
 </body>
+
+<script>
+    setTimeout(() => {
+        
+        window.location.reload(true)
+    }, 800);
+</script>
 </html>
